@@ -82,7 +82,6 @@ O documento irá adotar uma estrutura baseada na visão "4+1" de modelo de arqui
 
 Este Documento de Arquitetura de Software se aplica ao **PlantãoMed**, que será desenvolvido pelo **Grupo 3** (Talles Henrique Pacheco de Queiroz, Felipe Alcântara Santos Ribeiro, Yuri Guerra, Miguel Luís Ferreira de Paula e Luíz Fernando Gomes de Almeida).
 
-O PlantãoMed é um sistema WEB multicliente voltado para o mercado de plantões médicos no Brasil. Seu escopo abrange a conexão entre médicos plantonistas e instituições de saúde (hospitais e clínicas), incluindo os módulos de publicação de vagas, busca e candidatura, validação de credenciais via CFM, sistema de notificações interno, avaliação pós-plantão, chat integrado e relatórios financeiros.
 
 ---
 
@@ -133,14 +132,6 @@ Este documento irá detalhar as visões baseado no modelo "4+1" [KRU41], utiliza
 
 *Tabela 1 – Visões, Público, Área e Artefatos da MDS*
 
-O sistema PlantãoMed adota a **arquitetura MVC (Model-View-Controller)**, organizada em três camadas principais:
-
-- **Model (Modelo):** Responsável pela lógica de negócio, regras de domínio e acesso ao banco de dados MySQL. Implementado no backend Node.js.
-- **View (Visão):** Interface do usuário construída com React, responsável pela apresentação dos dados e pela interação com o usuário.
-- **Controller (Controlador):** Camada intermediária implementada no backend Node.js que recebe as requisições da View, aciona o Model e retorna as respostas adequadas.
-
-A comunicação entre o frontend React e o backend Node.js ocorre por meio de uma API REST, utilizando o formato JSON para troca de dados.
-
 ---
 
 ## 3. REQUISITOS E RESTRIÇÕES ARQUITETURAIS {#requisitos-e-restrições-arquiteturais}
@@ -149,10 +140,10 @@ Esta seção descreve os requisitos de software e restrições que têm um impac
 
 | Requisito | Solução |
 | :---- | :---- |
-| **Linguagem** | JavaScript (utilizada tanto no frontend quanto no backend, promovendo consistência tecnológica na equipe) |
-| **Plataforma** | Servidor de aplicações Node.js com framework Express.js para exposição da API REST. Frontend servido via navegador web, compatível com Chrome, Safari, Edge e demais navegadores modernos. |
-| **Segurança** | Autenticação simples com usuários armazenados no banco de dados interno MySQL. Senhas armazenadas com hash. Sem provedor externo de identidade neste momento. Conformidade com LGPD a definir em fases posteriores. |
-| **Persistência** | Banco de dados relacional MySQL. O sistema deve suportar o acúmulo histórico de dados de milhares de plantões mensais sem perda de velocidade nas buscas diárias. |
+| **Linguagem** | JavaScript |
+| **Plataforma** | Servidor de aplicações Node.js com framework Express.js para exposição da API REST. |
+| **Segurança** | Autenticação simples com usuários armazenados no banco de dados interno MySQL. Senhas armazenadas com hash. Sem provedor externo de identidade neste momento. |
+| **Persistência** | Banco de dados relacional MySQL. |
 | **Internacionalização (i18n)** | O sistema será desenvolvido exclusivamente em português do Brasil, sem suporte a internacionalização neste momento. |
 
 *Tabela 2 – Requisitos e restrições arquiteturais*
@@ -168,11 +159,8 @@ Lista de casos de uso do sistema:
 - **Caso de Uso 001 – Busca e Candidatura a Plantões**
 - **Caso de Uso 002 – Publicação de Vaga de Urgência**
 - **Caso de Uso 003 – Validação de Perfil e Credenciais (CRM via API do CFM)**
-- **Caso de Uso 004 – Recebimento de Notificações e Lembretes**
-- **Caso de Uso 005 – Avaliação Pós-Plantão**
-- **Caso de Uso 006 – Chat Integrado entre Médico e Hospital**
-- **Caso de Uso 007 – Geração de Relatórios Financeiros**
-- **Caso de Uso 008 – Autenticação de Usuário**
+- **Caso de Uso 004 – Avaliação Pós-Plantão**
+- **Caso de Uso 005 – Autenticação de Usuário**
 
 ### 4.1 Casos de Uso significantes para a arquitetura {#casos-de-uso-significantes-para-a-arquitetura}
 
@@ -180,8 +168,8 @@ Lista de casos de uso do sistema:
 
 O diagrama deve apresentar dois atores principais:
 
-- **Médico Plantonista:** Interage com os casos de uso de Autenticação, Busca e Candidatura a Plantões, Recebimento de Notificações, Chat Integrado e Geração de Relatórios Financeiros.
-- **Administrador Hospitalar:** Interage com os casos de uso de Autenticação, Publicação de Vaga de Urgência, Validação de Credenciais, Avaliação Pós-Plantão, Chat Integrado e Geração de Relatórios Financeiros.
+- **Médico Plantonista:** Interage com os casos de uso de Autenticação, Busca e Candidatura a Plantões.
+- **Administrador Hospitalar:** Interage com os casos de uso de Autenticação, Publicação de Vaga de Urgência, Validação de Credenciais e Avaliação Pós-Plantão.
 
 O sistema PlantãoMed aparece como o limite do sistema (system boundary), e a **API do CFM** aparece como ator secundário externo, acionada pelo caso de uso "Validação de Perfil e Credenciais".
 
@@ -191,13 +179,12 @@ Os casos de uso arquiteturalmente mais significativos são:
 
 2. **UC-003 – Validação de Credenciais:** Demonstra a integração externa com a API oficial do CFM, aspecto crítico para a confiabilidade e segurança da plataforma.
 
-3. **UC-004 – Notificações Internas:** Representa o mecanismo de alerta em tempo real dentro do painel da aplicação, sem dependência de canais externos (e-mail, SMS ou push).
 
 ---
 
 ## 5. VISÃO LÓGICA {#visão-lógica}
 
-Descrever uma visão lógica da arquitetura. Descreve as classes mais importantes, sua organização em pacotes de serviços e subsistemas, e a organização desses subsistemas em camadas. Também descreve as realizações dos casos de uso mais importantes, por exemplo, aspectos dinâmicos da arquitetura.
+Descrever uma visão lógica da arquitetura. Descrever as classes mais importantes, sua organização em pacotes de serviços e subsistemas, e a organização desses subsistemas em camadas. Também descreve as realizações dos casos de uso mais importantes, por exemplo, aspectos dinâmicos da arquitetura. Diagramas de classes e sequência devem ser incluídos para ilustrar os relacionamentos entre as classes significativas na arquitetura, subsistemas, pacotes e camadas.
 
 ### 5.1 Visão Geral – pacotes e camadas {#visão-geral-pacotes-e-camadas}
 
@@ -341,16 +328,16 @@ O diagrama de implantação deve apresentar os seguintes nodos e artefatos:
 
 Enumerar os itens relativos ao volume de acesso aos recursos da aplicação:
 
-- Número estimado de usuários: A definir (o mercado conta com mais de 1 milhão de médicos ativos no Brasil até 2035; estimativa inicial de crescimento gradual)
+- Número estimado de usuários: A definir
 - Número estimado de acessos diários: A definir
 - Número estimado de acessos por período: Picos esperados ao final de cada mês, durante o período de montagem de escalas hospitalares
-- Tempo de sessão de um usuário: A definir
+- Tempo de sessão de um usuário: 4 horas
 
 ### 8.2 Performance {#performance}
 
 Enumerar os itens referentes à resposta esperada do sistema:
 
-- Tempo máximo para a execução de determinada transação: O sistema deve ser suficientemente leve para rodar em computadores de escritório padrão dos hospitais, sem exigir hardware dedicado. A interface do médico deve permitir a candidatura a um plantão em no máximo 3 cliques a partir da visualização da notificação.
+- Tempo máximo para a execução de determinada transação: A definir
 
 ---
 
