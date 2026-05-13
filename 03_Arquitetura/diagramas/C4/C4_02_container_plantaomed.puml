@@ -1,0 +1,32 @@
+@startuml C4_container_plantaomed
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+' ============================================================
+' DIAGRAMA C4 — NÍVEL 2: CONTAINERS
+' Sistema: PlantaoMed
+' ============================================================
+
+title PlantaoMed — Diagrama de Containers (C4 - Nível 2)
+
+' --- Atores ---
+Person(medico, "Médico", "Registra e consulta plantões.")
+Person(coordenador, "Coordenador", "Gerencia escala de plantões.")
+
+' --- Containers do Sistema ---
+System_Boundary(plantaomed, "PlantaoMed") {
+    Container(web_app, "Aplicação Web", "React / Vue / Angular", "Interface principal acessada\npelo navegador.")
+    Container(mobile_app, "App Mobile", "React Native / Flutter", "Interface mobile para\nregistro rápido de plantões.")
+    Container(api, "API Backend", "Framework / Linguagem", "Processa regras de negócio\ne expõe endpoints REST.")
+    ContainerDb(banco, "Banco de Dados", "PostgreSQL / MySQL", "Armazena usuários, plantões\ne escalas.")
+}
+
+' --- Relacionamentos ---
+Rel(medico, web_app, "Acessa via", "HTTPS")
+Rel(medico, mobile_app, "Acessa via", "HTTPS")
+Rel(coordenador, web_app, "Acessa via", "HTTPS")
+Rel(web_app, api, "Consome", "REST/JSON, HTTPS")
+Rel(mobile_app, api, "Consome", "REST/JSON, HTTPS")
+Rel(api, banco, "Lê e escreve", "SQL/TCP")
+
+SHOW_LEGEND()
+@enduml

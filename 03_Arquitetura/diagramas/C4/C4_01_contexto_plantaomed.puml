@@ -1,0 +1,27 @@
+@startuml C4_contexto_plantaomed
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+' ============================================================
+' DIAGRAMA C4 — NÍVEL 1: CONTEXTO
+' Sistema: PlantaoMed
+' ============================================================
+
+title PlantaoMed — Diagrama de Contexto (C4 - Nível 1)
+
+' --- Personas / Atores ---
+Person(medico, "Médico", "Profissional de saúde que\nregistra e gerencia plantões.")
+Person(coordenador, "Coordenador", "Responsável por aprovar e\ngerenciar escala de plantões.")
+
+' --- Sistema Principal ---
+System(plantaomed, "PlantaoMed", "Sistema de gerenciamento\nde plantões médicos.")
+
+' --- Sistemas Externos ---
+' System_Ext(sistema_externo, "Nome do Sistema Externo", "Descrição")
+
+' --- Relacionamentos ---
+Rel(medico, plantaomed, "Registra plantões e\nvisualiza escala", "Web/Mobile")
+Rel(coordenador, plantaomed, "Gerencia escalas e\naprova plantões", "Web")
+
+' --- Legenda e Layout ---
+SHOW_LEGEND()
+@enduml
